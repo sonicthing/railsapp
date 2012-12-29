@@ -1,6 +1,5 @@
 Gmap::Application.routes.draw do
 
-  resources :tests
 
   root :to => 'characters#index'
   resources :characters
