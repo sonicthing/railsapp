@@ -1,0 +1,154 @@
+<%= form_for(@character) do |f| %>
+
+    <% if @character.errors.any? %>
+
+        <div id="error_explanation" xmlns="http://www.w3.org/1999/html">
+          <h2><%= pluralize(@character.errors.count, "error") %> prohibited this character from being saved:</h2>
+
+          <ul>
+            <% @character.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :Business_Name %><br />
+      <%= f.text_field :name ,  :placeholder=>"Enter your company name"%>
+    </div>
+    <div class="field">
+      <%= f.label :address %><br />
+      <%= f.text_field :address,  :placeholder=>"Enter your company address" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :Post_Code %><br />
+      <%= select :search, params[:search], ([["Dublin 1"], ["Dublin 2"], ["Dublin 3"], ["Dublin 4"], ["Dublin 5"]]) %>
+      </div>
+    </div>
+
+    <div>
+      <h3><%= f.label  :Category %> </h3>
+      <%= select :search, params[:search], ([["Clothing"], ["Restaurants"], ["Travel"], ["Entertainment"], 			["Services"]]) %>
+    </div>
+    </br>
+
+
+    <br>
+
+    <%= f.label :Payments_Accepted %><br />
+    <select name="payment">
+      <option value="1">VISA</option>
+      <option value="2">MasterCard</option>
+      <option value="3">Switch</option>
+    </select>
+
+          </br>
+
+
+     <h3> Payments Accepted   </h3>
+
+    <%= f.check_box :gmaps %>
+    <%= f.label :Credit_cards %><br>
+    <%= f.check_box :gmaps %>
+    <%= f.label :Debit_cards %> <br>
+    <%= f.check_box :gmaps %>
+    <%= f.label :Cash_only %>   <br>
+    <br>
+
+
+
+    <div class="field">
+      <%= f.label :longitude %><br />
+      <%= f.text_field :longitude %>
+    </div>
+
+
+
+    <div class="field">
+      <%= f.label :latitude %><br />
+      <%= f.text_field :latitude %>
+    </div>
+
+
+
+      <%= f.label :gmaps %><br />
+      <%= f.check_box :gmaps %>
+
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+
+    </div>
+
+
+
+<% end %>
+
+	<div>
+		
+		<%= gmaps4rails(@json) %>
+		
+
+	</div>
+
+
+<% content_for :scripts do %>
+    <script type="text/javascript" charset="utf-8">
+        var markersArray = [];
+
+        // On click, clear markers, place a new one, update coordinates in the form
+        Gmaps.map.callback = function() {
+            google.maps.event.addListener(Gmaps.map.serviceObject, 'click', function(event) {
+                clearOverlays();
+                placeMarker(event.latLng);
+                updateFormLocation(event.latLng);
+            });
+        };
+
+
+        // Add a marker with an open infowindow
+        function placeMarker(latLng) {
+            var marker = new google.maps.Marker({
+                position: latLng,
+                map: Gmaps.map.serviceObject,
+                draggable: true
+            });
+
+
+            // Update form attributes with given coordinates
+            function updateFormLocation(latLng) {
+                $("#character_latitude").val(latLng.lat());
+                $('#character_longitude').val(latLng.lng());
+                $('#character_attributes_gmaps_zoom').val(Gmaps.map.serviceObject.getZoom());
+            }
+
+            markersArray.push(marker);
+            // Set and open infowindow
+            var infowindow = new google.maps.InfoWindow({
+                content: '<div class="popup"><h2>Hello!</h2><p>Drag me and adjust the zoom level.</p>'
+            });
+            infowindow.open(Gmaps.map.serviceObject,marker);
+
+            // Listen to drag & drop 
+            google.maps.event.addListener(marker, 'dragend', function() {
+                updateFormLocation(this.getPosition());
+            });
+        }
+
+        // Removes the overlays from the map
+        function clearOverlays() {
+            if (markersArray) {
+                for (var i = 0; i < markersArray.length; i++ ) {
+                    markersArray[i].setMap(null);
+                }
+            }
+            markersArray.length = 0;
+        }
+    </script>
+
+
+
+ 	<% end %>

@@ -1,0 +1,62 @@
+<h1 xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">Outlet Locations</h1>
+
+
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Address</th>
+    <th>Longitude</th>
+    <th>Latitude</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @characters.each do |character| %>
+  <tr>
+    <td><%= character.name %></td>
+    <td><%= character.address %></td>
+    <td><%= character.longitude %></td>
+    <td><%= character.latitude %></td>
+    
+
+    <td><%= link_to 'Show', character %></td>
+    <td><%= link_to 'Edit', edit_character_path(character) %></td>
+    <td><%= link_to 'Destroy', character, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
+
+  </tr>
+<% end %>
+</table>
+
+<ul id="markers_list">  </ul>
+
+<br />
+<hr>
+
+<%= link_to 'New Character', new_character_path %>
+<br/>
+<br/>
+
+<%= gmaps4rails(@json) %>
+
+
+<p>
+<%= @time %>
+</p>
+
+
+<p>
+  you go <ahref=""> hi</a>  for a list of all files in the app directory
+  </br>
+  <% for file in @files %>
+      <ul>
+  file name :<%= file  %>
+      </ul>
+      <% end %>
+</p>
+
+
+
+
