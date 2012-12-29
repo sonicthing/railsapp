@@ -2,7 +2,7 @@ Gmap::Application.routes.draw do
 
   resources :tests
 
-  root :to => 'characters#new'
+  root :to => 'characters#index'
   resources :characters
 
   # The priority is based upon order of creation:
